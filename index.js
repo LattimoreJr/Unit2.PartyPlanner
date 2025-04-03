@@ -8,9 +8,9 @@ const render = () => {
     return `
     <div>
     <h2>${party.name}</h2>
-    <p>${party.description}</p>
-    <p>${party.date}</p>
-    <p>${party.location}</p>
+    <p>Description: ${party.description}</p>
+    <p>Date: ${party.date}</p>
+    <p>Location: ${party.location}</p>
     <button class="deleteButton" name="${party.id}">Delete</button>
     
     </div>
@@ -21,7 +21,7 @@ const render = () => {
 
 const fetchParties = async () => {
    try {
-    const response = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-ftb-et-web-am/events")
+    const response = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-ftb-et-web-pm/events")
     const json = await response.json()
     parties = json.data
    } catch (error) {
@@ -38,11 +38,11 @@ partyForm.addEventListener("submit", async (event) => {
     const newParty = {
         name: event.target.name.value,
         description: event.target.description.value,
-        date: event.target.date.value,
+        date: new Date(event.target.date.value),
         location: event.target.location.value,
     }
     try {
-        const response = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-ftb-et-web-am/events",{
+        const response = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-ftb-et-web-pm/events",{
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -50,7 +50,7 @@ partyForm.addEventListener("submit", async (event) => {
             body: JSON.stringify(newParty),
         })
         const json = await response.json()
-        parties.push(json.data.event)
+        parties.push(json.data)
         render()
         partyForm.reset()
     } catch (error) {
@@ -64,7 +64,7 @@ partyList.addEventListener("click", async (event) => {
     if(event.target.className === "deleteButton") {
         const partyId = event.target.name
         try {
-            await fetch(`https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-ftb-et-web-am/events/${partyId}`, {
+            await fetch(`https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-ftb-et-web-pm/events/${partyId}`, {
                 method: "DELETE",
             })
             event.target.parentElement.remove()
